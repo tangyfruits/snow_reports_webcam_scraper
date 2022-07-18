@@ -2,6 +2,9 @@ import urllib.request
 import time
 import schedule
 import os
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 def build_url(webcam):
@@ -17,9 +20,9 @@ def save_img():
     ruapehu = whakapapa + turoa
     for field in ruapehu:
         print(field)
-        os.makedirs(field, exist_ok=True)
+        os.makedirs("/tmp/" + field, exist_ok=True)
         url = build_url(field)
-        resp = urllib.request.urlretrieve(url, field + "/" + url.split('?')[-1] + ".jpg")
+        resp = urllib.request.urlretrieve(url, "/tmp/" + field + "/" + url.split('?')[-1] + ".jpg")
 
 
 schedule.every(15).minutes.do(save_img)
@@ -27,3 +30,4 @@ schedule.every(15).minutes.do(save_img)
 while 1:
     schedule.run_pending()
     time.sleep(1)
+
